@@ -18,7 +18,8 @@
     }
   ],
   "dependencies": {
-    "@raycast/api": "^1.43.2"
+    "@raycast/api": "^1.43.2",
+    "run-applescript": "^6.0.0"
   },
   "devDependencies": {
     "@types/node": "18.8.3",
