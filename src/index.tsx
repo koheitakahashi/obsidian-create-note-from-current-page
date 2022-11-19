@@ -1,4 +1,4 @@
-import { Form, ActionPanel, Action, showToast } from "@raycast/api";
+import { Form, ActionPanel, Action, showToast, getPreferenceValues } from "@raycast/api";
 import { useState, useEffect } from "react";
 import { runAppleScript } from "run-applescript";
 import path from "path";
@@ -14,9 +14,15 @@ type Values = {
   noteBody: string;
 };
 
+interface Preferences {
+  obsidianVaultPath: string;
+}
+
 export default function Command() {
   const [title, setTitle] = useState<string>("");
   const [body, setBody] = useState<string>("");
+
+  const obsidianVaultPath = getPreferenceValues<Preferences>().obsidianVaultPath;
 
   const frontMostBrowserLink = async (): Promise<Link> => {
     const titleAndUrl = await runAppleScript(`
@@ -50,7 +56,7 @@ export default function Command() {
   }, []);
 
   function handleSubmit(values: Values) {
-    const filePath = path.join(OBSIDIAN_VAULT_PATH, values.noteTitle + ".md");
+    const filePath = path.join(obsidianVaultPath, values.noteTitle + ".md");
 
     try {
       fs.writeFileSync(filePath, values.noteBody)

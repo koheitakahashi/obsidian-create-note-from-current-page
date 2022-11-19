@@ -12,7 +12,7 @@
   "commands": [
     {
       "name": "index",
-      "title": "Submit Form",
+      "title": "obsidian-create-note-from-current-page",
       "description": "Template for submitting a form",
       "mode": "view"
     }
@@ -37,5 +37,15 @@
     "fix-lint": "ray lint --fix",
     "lint": "ray lint",
     "publish": "ray publish"
-  }
+  },
+  "preferences": [
+    {
+      "name": "obsidianVaultPath",
+      "type": "textfield",
+      "placeholder": "path",
+      "title": "Obsidian Vault Path",
+      "required": true,
+      "description": "Please set your Obsidian vault path"
+    }
+  ]
 }
