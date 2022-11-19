@@ -1,6 +1,8 @@
 import { Form, ActionPanel, Action, showToast } from "@raycast/api";
 import { useState, useEffect } from "react";
 import { runAppleScript } from "run-applescript";
+import path from "path";
+import fs from "fs";
 
 type Link = {
   title: string;
@@ -38,7 +40,9 @@ export default function Command() {
       const link = await frontMostBrowserLink();
       setTitle(link.title);
 
-      const body = `---\ntags: learned\n---\n\n created_at:${new Date().toISOString()}\n\n[${link.title}](${link.url})`;
+      const now = new Date().toISOString()
+      const formatedNow = now.substring(0, now.indexOf("T"))
+      const body = `---\ntags: learned\n---\ncreated_at: ${formatedNow}\n\n[${link.title}](${link.url})`;
       setBody(body);
     };
 
@@ -46,7 +50,13 @@ export default function Command() {
   }, []);
 
   function handleSubmit(values: Values) {
-    console.log(values);
+    const filePath = path.join(OBSIDIAN_VAULT_PATH, values.noteTitle + ".md");
+
+    try {
+      fs.writeFileSync(filePath, values.noteBody)
+    } catch {
+      showToast({ title: "Couldn't write to file:", message: filePath + ".md"});
+    }
     showToast({ title: "Submitted form", message: "See logs for submitted values" });
   }
 
