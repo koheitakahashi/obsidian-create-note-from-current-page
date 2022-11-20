@@ -1,4 +1,4 @@
-import { Form, ActionPanel, Action, showToast, getPreferenceValues } from "@raycast/api";
+import { Form, ActionPanel, Action, showToast, getPreferenceValues, open } from "@raycast/api";
 import { useState, useEffect } from "react";
 import { runAppleScript } from "run-applescript";
 import path from "path";
@@ -61,9 +61,14 @@ export default function Command() {
     try {
       fs.writeFileSync(filePath, values.noteBody)
     } catch {
-      showToast({ title: "Couldn't write to file:", message: filePath + ".md"});
+      showToast({ title: "Couldn't write to file:", message: filePath + ".md" });
     }
     showToast({ title: "Submitted form", message: "See logs for submitted values" });
+
+    setTimeout(() => {
+      const obsidianPath = "obsidian://open?path=" + encodeURIComponent(path.join(filePath + ".md"));;
+      open(obsidianPath);
+    }, 200)
   }
 
   return (
