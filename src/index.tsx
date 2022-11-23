@@ -4,7 +4,7 @@ import { runAppleScript } from "run-applescript";
 import path from "path";
 import fs from "fs";
 
-type Link = {
+type Page = {
   title: string;
   url: string;
 }
@@ -19,12 +19,12 @@ interface Preferences {
 }
 
 export default function Command() {
-  const [title, setTitle] = useState<string>("");
-  const [body, setBody] = useState<string>("");
+  const [noteTitle, setNoteTitle] = useState<string>("");
+  const [noteBody, setNoteBody] = useState<string>("");
 
   const obsidianVaultPath = getPreferenceValues<Preferences>().obsidianVaultPath;
 
-  const frontMostBrowserLink = async (): Promise<Link> => {
+  const fetchCurrentPage = async (): Promise<Page> => {
     const titleAndUrl = await runAppleScript(`
       tell application "System Events" to set frontApp to name of first process whose frontmost is true
       if frontApp = "Google Chrome"
@@ -35,21 +35,20 @@ export default function Command() {
         return currentTabTitle & "\n" & currentTabUrl
       end if
     `);
+    const [title, url] = titleAndUrl.split("\n");
 
-    const [originalTitle, originalUrl] = titleAndUrl.split("\n");
-
-    return { title: originalTitle, url: originalUrl }
+    return { title: title, url: url }
   };
 
   useEffect(() => {
     const initializeStore = async () => {
-      const link = await frontMostBrowserLink();
-      setTitle(link.title);
+      const page = await fetchCurrentPage();
+      setNoteTitle(page.title);
 
       const now = new Date().toISOString()
       const formatedNow = now.substring(0, now.indexOf("T"))
-      const body = `---\ntags: learned\n---\ncreated_at: ${formatedNow}\n\n[${link.title}](${link.url})`;
-      setBody(body);
+      const body = `---\ntags: learned\n---\ncreated_at: ${formatedNow}\n\n[${page.title}](${page.url})`;
+      setNoteBody(body);
     };
 
     initializeStore();
@@ -79,8 +78,8 @@ export default function Command() {
         </ActionPanel>
       }
     >
-      <Form.TextField id="noteTitle" title="Note title" value={title} onChange={setTitle} />
-      <Form.TextArea id="noteBody" title="Note body" value={body} onChange={setBody} />
+      <Form.TextField id="noteTitle" title="Note title" value={noteTitle} onChange={setNoteTitle} />
+      <Form.TextArea id="noteBody" title="Note body" value={noteBody} onChange={setNoteBody} />
     </Form>
   );
 }
