@@ -1,3 +1,3 @@
-# obsidian-create-note-from-current-page Changelog
+# obsidian-note-creator
 
 ## [Initial Version] - 2022-11-18

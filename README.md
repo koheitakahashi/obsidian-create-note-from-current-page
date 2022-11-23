@@ -1,1 +1,1 @@
-# obsidian-create-note-from-current-page
+# obsidian-note-creator

@@ -1,7 +1,7 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "obsidian-create-note-from-current-page",
-  "title": "obsidian-create-note-from-current-page",
+  "name": "obsidian-note-creator",
+  "title": "obsidian-note-creator",
   "description": "",
   "icon": "command-icon.png",
   "author": "koheitakahashi",
@@ -12,7 +12,7 @@
   "commands": [
     {
       "name": "index",
-      "title": "obsidian-create-note-from-current-page",
+      "title": "obsidian-note-creator",
       "description": "Template for submitting a form",
       "mode": "view"
     }
