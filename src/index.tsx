@@ -65,7 +65,7 @@ export default function Command() {
     showToast({ title: "Submitted form", message: "See logs for submitted values" });
 
     setTimeout(() => {
-      const obsidianPath = "obsidian://open?path=" + encodeURIComponent(path.join(filePath + ".md"));;
+      const obsidianPath = "obsidian://open?path=" + encodeURIComponent(filePath);;
       open(obsidianPath);
     }, 200)
   }
