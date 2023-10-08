@@ -47,7 +47,7 @@ export default function Command() {
 
       const now = new Date().toISOString()
       const formatedNow = now.substring(0, now.indexOf("T"))
-      const body = `---\ntags: literature\n---\ncreated_at: ${formatedNow}\n\n[${page.title}](${page.url})`;
+      const body = `---\ntags: literature, web\ncreated_at: ${formatedNow}\n---\n[${page.title}](${page.url})`;
       setNoteBody(body);
     };
 
