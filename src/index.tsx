@@ -1,4 +1,4 @@
-import { Form, ActionPanel, Action, showToast, getPreferenceValues, open, popToRoot} from "@raycast/api";
+import { Form, ActionPanel, Action, showToast, getPreferenceValues, open, popToRoot } from "@raycast/api";
 import { useState, useEffect } from "react";
 import { runAppleScript } from "run-applescript";
 import path from "path";
@@ -7,7 +7,7 @@ import fs from "fs";
 type Page = {
   title: string;
   url: string;
-}
+};
 
 type Values = {
   noteTitle: string;
@@ -38,22 +38,22 @@ export default function Command() {
     `);
     const [title, url] = titleAndUrl.split("\n");
 
-    return { title: title, url: url }
+    return { title: title, url: url };
   };
 
   const defaultNoteTags = ["literature/web"];
 
   const buildNoteBody = (title: string, url: string, tags: Array<string>): string => {
-    const now = new Date().toISOString()
-    const formatedNow = now.substring(0, now.indexOf("T"))
-    const tagsString = tags.join(", ")
+    const now = new Date().toISOString();
+    const formatedNow = now.substring(0, now.indexOf("T"));
+    const tagsString = tags.join(", ");
     return `---\ntags: ${tagsString}\ncreated_at: ${formatedNow}\nupdated_at: ${formatedNow}\n---\n\n[${title}](${url})`;
-  }
+  };
 
   useEffect(() => {
     const initializeStore = async () => {
       const page = await fetchCurrentPage();
-      setNoteTitle(page.title);
+      setNoteTitle(`📘${page.title}`);
       setNoteTags(defaultNoteTags);
       setNoteBody(buildNoteBody(page.title, page.url, defaultNoteTags));
     };
@@ -65,17 +65,17 @@ export default function Command() {
     const filePath = path.join(obsidianVaultPath, values.noteTitle + ".md");
 
     try {
-      fs.writeFileSync(filePath, values.noteBody)
-       popToRoot({ clearSearchBar: true })
+      fs.writeFileSync(filePath, values.noteBody);
+      popToRoot({ clearSearchBar: true });
     } catch {
       showToast({ title: "Couldn't write to file:", message: filePath + ".md" });
     }
     showToast({ title: "Submitted form", message: "See logs for submitted values" });
 
     setTimeout(() => {
-      const obsidianPath = "obsidian://open?path=" + encodeURIComponent(filePath);;
+      const obsidianPath = "obsidian://open?path=" + encodeURIComponent(filePath);
       open(obsidianPath);
-    }, 200)
+    }, 200);
   }
 
   return (
