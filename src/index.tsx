@@ -1,4 +1,4 @@
-import { Form, ActionPanel, Action, showToast, getPreferenceValues, open } from "@raycast/api";
+import { Form, ActionPanel, Action, showToast, getPreferenceValues, open, popToRoot} from "@raycast/api";
 import { useState, useEffect } from "react";
 import { runAppleScript } from "run-applescript";
 import path from "path";
@@ -59,6 +59,7 @@ export default function Command() {
 
     try {
       fs.writeFileSync(filePath, values.noteBody)
+       popToRoot({ clearSearchBar: true })
     } catch {
       showToast({ title: "Couldn't write to file:", message: filePath + ".md" });
     }
