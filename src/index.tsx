@@ -20,6 +20,7 @@ interface Preferences {
 
 export default function Command() {
   const [noteTitle, setNoteTitle] = useState<string>("");
+  const [noteTags, setNoteTags] = useState<Array<string>>([]);
   const [noteBody, setNoteBody] = useState<string>("");
 
   const obsidianVaultPath = getPreferenceValues<Preferences>().obsidianVaultPath;
@@ -40,15 +41,21 @@ export default function Command() {
     return { title: title, url: url }
   };
 
+  const defaultNoteTags = ["literature/web"];
+
+  const buildNoteBody = (title: string, url: string, tags: Array<string>): string => {
+    const now = new Date().toISOString()
+    const formatedNow = now.substring(0, now.indexOf("T"))
+    const tagsString = tags.join(", ")
+    return `---\ntags: ${tagsString}\ncreated_at: ${formatedNow}\nupdated_at: ${formatedNow}\n---\n\n[${title}](${url})`;
+  }
+
   useEffect(() => {
     const initializeStore = async () => {
       const page = await fetchCurrentPage();
       setNoteTitle(page.title);
-
-      const now = new Date().toISOString()
-      const formatedNow = now.substring(0, now.indexOf("T"))
-      const body = `---\ntags: literature, web\ncreated_at: ${formatedNow}\n---\n[${page.title}](${page.url})`;
-      setNoteBody(body);
+      setNoteTags(defaultNoteTags);
+      setNoteBody(buildNoteBody(page.title, page.url, defaultNoteTags));
     };
 
     initializeStore();
